@@ -1,0 +1,29 @@
+version: '3'
+volumes:
+  mysql_db:
+    driver: local
+networks:
+  capttone_express_orm:
+services:
+  mysql_db:
+    image: mysql
+    container_name: mysql_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 3308:3306
+    volumes:
+      - mysql_db:/var/lib/mysql
+    networks:
+      - capttone_express_orm
+  app_capstone_express_orm:
+    depends_on:
+      - mysql_db
+    build: .
+    container_name: app_capstone_express_orm
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    networks:
+      - capttone_express_orm
